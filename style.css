@@ -1,0 +1,366 @@
+/* ============================================================
+   style.css  –  Fodinha Online  –  Mobile-first
+   ============================================================ */
+
+:root {
+  --green:   #1a6b3c;
+  --green-d: #144f2d;
+  --gold:    #f0c040;
+  --red:     #cc2200;
+  --white:   #f5f5f0;
+  --card-bg: #fffef5;
+  --card-border: #bbb;
+  --shadow:  0 2px 8px rgba(0,0,0,.35);
+  --radius:  10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--green);
+  color: var(--white);
+  min-height: 100dvh;
+}
+
+/* ---- Utilitários ----------------------------------------- */
+.hidden { display: none !important; }
+.flex   { display: flex; }
+.col    { flex-direction: column; }
+.gap-1  { gap: .5rem; }
+.gap-2  { gap: 1rem; }
+.center { align-items: center; justify-content: center; }
+.text-center { text-align: center; }
+.mt-1   { margin-top: .5rem; }
+.mt-2   { margin-top: 1rem; }
+
+/* ---- Tela de entrada ------------------------------------- */
+#screen-lobby {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+#screen-lobby h1 {
+  font-size: 2.4rem;
+  color: var(--gold);
+  text-shadow: 0 2px 6px rgba(0,0,0,.5);
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+}
+
+.lobby-card {
+  background: rgba(0,0,0,.35);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lobby-card label {
+  font-size: .9rem;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.lobby-card input, .lobby-card select {
+  padding: .75rem 1rem;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  font-size: 1.1rem;
+  width: 100%;
+  outline: none;
+}
+.lobby-card input::placeholder { color: rgba(255,255,255,.45); }
+.lobby-card input:focus { border-color: #fff; }
+
+/* ---- Botões ---------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .85rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter .15s, transform .1s;
+  letter-spacing: .5px;
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+.btn-primary   { background: var(--gold); color: #222; }
+.btn-primary:hover:not(:disabled)   { filter: brightness(1.1); }
+.btn-secondary { background: rgba(255,255,255,.15); color: var(--white); }
+.btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,.25); }
+.btn-danger    { background: var(--red); color: #fff; }
+.btn-danger:hover:not(:disabled)    { filter: brightness(1.15); }
+.btn-sm        { padding: .5rem 1rem; font-size: .9rem; }
+.btn-full      { width: 100%; }
+
+/* ---- Tela da partida ------------------------------------- */
+#screen-game {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: .5rem;
+  gap: .5rem;
+}
+
+/* Header */
+#game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0,0,0,.3);
+  border-radius: var(--radius);
+  padding: .6rem 1rem;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+#game-header .title { font-weight: 700; color: var(--gold); font-size: 1rem; }
+#game-round-info    { font-size: .85rem; color: rgba(255,255,255,.75); }
+
+/* Painel do Vira */
+#vira-panel {
+  background: rgba(0,0,0,.25);
+  border-radius: var(--radius);
+  padding: .6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+#vira-panel .label { font-size: .8rem; text-transform: uppercase; color: var(--gold); letter-spacing: 1px; }
+#vira-panel .value { font-weight: 700; font-size: 1rem; }
+
+/* Lista de jogadores */
+#players-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.player-chip {
+  background: rgba(0,0,0,.3);
+  border-radius: 8px;
+  padding: .45rem .75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  flex: 1 1 80px;
+  max-width: 120px;
+  border: 2px solid transparent;
+  transition: border-color .2s;
+  position: relative;
+}
+.player-chip.is-dealer  { border-color: var(--gold); }
+.player-chip.is-active-turn { border-color: #00e0ff; box-shadow: 0 0 8px #00e0ff88; }
+.player-chip.is-me      { background: rgba(0,80,40,.5); }
+.player-chip.eliminated { opacity: .4; }
+
+.player-chip .nick { font-size: .85rem; font-weight: 700; }
+.player-chip .lives { font-size: .75rem; color: #ff9a9a; }
+.player-chip .bet-info { font-size: .7rem; color: #adffc2; }
+.player-chip .dealer-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--gold);
+  color: #222;
+  font-size: .6rem;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+/* Mesa / vazas */
+#table-area {
+  background: rgba(0,0,0,.2);
+  border-radius: var(--radius);
+  padding: .75rem;
+  min-height: 80px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+/* Cartas jogadas na mesa */
+.played-card-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .2rem;
+  font-size: .75rem;
+  color: rgba(255,255,255,.7);
+}
+
+/* ---- Cartas --------------------------------------------- */
+.card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 82px;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: default;
+  position: relative;
+  transition: transform .15s, box-shadow .15s;
+  color: #222;
+}
+.card.playable {
+  cursor: pointer;
+  border-color: #00e0ff;
+  box-shadow: 0 0 10px #00e0ff88;
+}
+.card.playable:hover { transform: translateY(-6px); box-shadow: var(--shadow), 0 0 12px #00e0ffaa; }
+.card.back {
+  background: repeating-linear-gradient(
+    45deg, #0a5c2e, #0a5c2e 4px, #0e7a3e 4px, #0e7a3e 8px
+  );
+  border-color: var(--gold);
+  color: transparent;
+}
+.card.joker { border-color: #ff4444; color: var(                           --red); }
+.card .suit-icon { font-size: 1.2rem; line-height: 1; }
+.card .val { font-size: 1rem; }
+
+.suit-O { color: #cc8800; }
+.suit-E { color: #222; }
+.suit-C { color: #cc0033; }
+.suit-P { color: #224; }
+.suit-J { color: var(--red); }
+
+/* Mão do jogador */
+#my-hand {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: center;
+  padding: .5rem 0;
+}
+
+/* Área de palpite */
+#bet-area {
+  background: rgba(0,0,0,.3);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+#bet-area h3 { color: var(--gold); font-size: 1rem; }
+#bet-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.bet-btn {
+  min-width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  border: 2px solid var(--gold);
+  background: rgba(255,255,255,.1);
+  color: var(--white);
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .15s;
+}
+.bet-btn:hover:not(:disabled) { background: rgba(255,200,0,.3); }
+.bet-btn:disabled { opacity: .35; cursor: not-allowed; }
+
+/* Log de eventos */
+#event-log {
+  background: rgba(0,0,0,.35);
+  border-radius: var(--radius);
+  padding: .75rem;
+  max-height: 130px;
+  overflow-y: auto;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,.8);
+}
+#event-log p { border-bottom: 1px solid rgba(255,255,255,.05); padding: .1rem 0; }
+
+/* Status banner */
+#status-banner {
+  background: rgba(0,0,0,.4);
+  border-radius: var(--radius);
+  padding: .6rem 1rem;
+  text-align: center;
+  font-size: .95rem;
+  color: #adffc2;
+  font-weight: 600;
+  min-height: 2.5rem;
+}
+#status-banner.warn { color: #ffd080; }
+#status-banner.danger { color: #ff8080; }
+
+/* Chat */
+#chat-area {
+  display: flex;
+  gap: .5rem;
+}
+#chat-input {
+  flex: 1;
+  padding: .6rem .8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.25);
+  background: rgba(0,0,0,.3);
+  color: var(--white);
+  font-size: .9rem;
+  outline: none;
+}
+
+/* Modal de fim de jogo */
+#modal-gameover {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+#modal-gameover .box {
+  background: var(--green-d);
+  border: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+#modal-gameover h2 { color: var(--gold); font-size: 1.8rem; }
+
+/* Responsive desktop */
+@media (min-width: 600px) {
+  .card { width: 64px; height: 94px; font-size: .85rem; }
+  .card .val { font-size: 1.1rem; }
+}

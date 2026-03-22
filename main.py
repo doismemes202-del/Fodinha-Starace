@@ -1,0 +1,84 @@
+"""
+main.py - Servidor FastAPI do jogo Fodinha.
+
+Rotas HTTP:
+  GET /           → Serve o frontend (index.html)
+  GET /static/*   → Arquivos estáticos (CSS, JS)
+
+WebSocket:
+  WS /ws/{room_id}?pid=&nickname=  → Conexão de um jogador
+
+Inicie com:
+  uvicorn main:app --reload --host 0.0.0.0 --port 8000
+"""
+
+import json
+import logging
+import uuid
+from pathlib import Path
+
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Query
+from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+
+from game.manager import manager
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+app = FastAPI(title="Fodinha Online")
+
+# Serve arquivos estáticos em /static
+STATIC_DIR = Path(__file__).parent / "static"
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def serve_index():
+    """Serve a página principal do jogo."""
+    index_path = STATIC_DIR / "index.html"
+    return HTMLResponse(content=index_path.read_text(encoding="utf-8"))
+
+
+@app.websocket("/ws/{room_id}")
+async def websocket_endpoint(
+    websocket: WebSocket,
+    room_id: str,
+    pid: str = Query(default=None),
+    nickname: str = Query(default="Jogador"),
+):
+    """Endpoint WebSocket principal.
+
+    O cliente pode passar seu próprio pid (para reconexão)
+    ou deixar em branco para receber um novo.
+    """
+    if not pid:
+        pid = str(uuid.uuid4())[:8]
+
+    # Normalizar nickname
+    nickname = (nickname or "Jogador").strip()[:20] or "Jogador"
+
+    err = await manager.connect(websocket, pid, nickname, room_id)
+    if err:
+        await websocket.close(code=1008, reason=err)
+        return
+
+    # Enviar pid atribuído ao cliente
+    await websocket.send_text(json.dumps({"type": "connected", "pid": pid, "nickname": nickname}))
+
+    try:
+        while True:
+            raw = await websocket.receive_text()
+            try:
+                data = json.loads(raw)
+            except json.JSONDecodeError:
+                continue
+            await manager.handle_message(pid, data)
+    except WebSocketDisconnect:
+        await manager.disconnect(pid)
+        logger.info("Jogador %s (%s) desconectou.", nickname, pid)
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok", "rooms": list(manager.rooms.keys())}

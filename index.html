@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Fodinha Online 🃏</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<!-- ===================== LOBBY ======================== -->
+<div id="screen-lobby">
+  <h1>🃏 Fodinha</h1>
+  <div class="lobby-card">
+    <label for="input-nick">Seu apelido</label>
+    <input id="input-nick" type="text" maxlength="20" placeholder="ex.: Zé das Cartas" autocomplete="off" />
+
+    <label for="input-room">Sala</label>
+    <input id="input-room" type="text" maxlength="20" placeholder="default" value="default" autocomplete="off" />
+
+    <button class="btn btn-primary btn-full mt-2" id="btn-enter">Entrar na Sala</button>
+    <p id="lobby-error" style="color:#ff8080;font-size:.85rem;min-height:1.2em;"></p>
+  </div>
+</div>
+
+<!-- ===================== GAME ========================= -->
+<div id="screen-game" class="hidden">
+
+  <!-- Header -->
+  <div id="game-header">
+    <span class="title">🃏 Fodinha Online</span>
+    <span id="game-round-info">Aguardando…</span>
+  </div>
+
+  <!-- Status -->
+  <div id="status-banner">Aguardando jogadores…</div>
+
+  <!-- Jogadores -->
+  <div id="players-list"></div>
+
+  <!-- Vira + Manilha -->
+  <div id="vira-panel">
+    <span class="label">Vira:</span>
+    <span id="vira-display" class="value">—</span>
+    <span class="label" style="margin-left:.5rem">Manilha:</span>
+    <span id="manilha-display" class="value">—</span>
+  </div>
+
+  <!-- Mesa (cartas jogadas) -->
+  <div id="table-area">
+    <span id="table-empty" style="color:rgba(255,255,255,.4);font-size:.85rem">Mesa vazia</span>
+  </div>
+
+  <!-- Palpite -->
+  <div id="bet-area" class="hidden">
+    <h3 id="bet-title">Faça seu palpite</h3>
+    <div id="bet-buttons"></div>
+    <p id="bet-restriction" style="font-size:.8rem;color:#ffd080;"></p>
+  </div>
+
+  <!-- Mão do jogador -->
+  <div id="my-hand-section">
+    <p style="font-size:.8rem;color:rgba(255,255,255,.5);padding:.25rem 0">Suas cartas:</p>
+    <div id="my-hand"></div>
+  </div>
+
+  <!-- Botões de ação -->
+  <div class="flex gap-1" id="action-buttons">
+    <button class="btn btn-primary hidden" id="btn-start">Iniciar Partida</button>
+    <button class="btn btn-secondary hidden" id="btn-next-round">Próxima Rodada ▶</button>
+  </div>
+
+  <!-- Log de eventos -->
+  <div id="event-log"></div>
+
+  <!-- Chat -->
+  <div id="chat-area">
+    <input id="chat-input" type="text" maxlength="200" placeholder="Escreva algo… (Enter)" autocomplete="off" />
+    <button class="btn btn-secondary btn-sm" id="btn-chat">↩</button>
+  </div>
+
+</div>
+
+<!-- Modal Fim de Jogo -->
+<div id="modal-gameover" class="hidden">
+  <div class="box">
+    <h2>🏆 Fim de Jogo!</h2>
+    <p id="gameover-text"></p>
+    <button class="btn btn-primary" id="btn-new-game">Nova Partida</button>
+  </div>
+</div>
+
+<script src="/static/game.js" type="module"></script>
+</body>
+</html>
